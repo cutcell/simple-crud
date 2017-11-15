@@ -19,13 +19,18 @@ public class DBService {
 
     Connection connection = null;
     try {
+      Class.forName("org.h2.Driver");
       connection = DriverManager.getConnection("jdbc:h2:./h2", "sa", "");
-    } catch (SQLException e) {
+    } catch (SQLException | ClassNotFoundException e) {
       e.printStackTrace();
     }
 
     return connection;
 
+  }
+
+  public Connection getConnection() {
+    return connection;
   }
 
   public void createUsersTable() {
@@ -58,5 +63,12 @@ public class DBService {
     }
   }
 
+  public void shutdown() {
+    try {
+      connection.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
 
 }
