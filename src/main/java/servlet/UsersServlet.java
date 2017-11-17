@@ -32,7 +32,22 @@ public class UsersServlet extends HttpServlet {
 
     } else if (params.containsKey("edit")) {
 
+      String userId = req.getParameter("edit");
+
+      User editUser = userService.getUserById(Integer.valueOf(userId));
+
+      req.setAttribute("editUser", editUser);
+      getServletContext()
+          .getRequestDispatcher("/WEB-INF/EditUser.jsp")
+          .forward(req, resp);
+
     } else if (params.containsKey("delete")) {
+
+      String userId = req.getParameter("delete");
+      userService.deleteUserById(Integer.valueOf(userId));
+
+      resp.setStatus(HttpServletResponse.SC_OK);
+      resp.sendRedirect("/users/view");
 
     } else {
 
@@ -55,7 +70,17 @@ public class UsersServlet extends HttpServlet {
     String phone = req.getParameter("phone");
     String email = req.getParameter("email");
 
-    userService.addNewUser(name, phone, email);
+    if (req.getParameterMap().containsKey("id")) {
+
+      String idString = req.getParameter("id");
+      User editUser = new User(name, phone, email);
+      userService.editUser(Integer.valueOf(idString), editUser);
+
+    } else {
+
+      userService.addNewUser(name, phone, email);
+
+    }
 
     resp.setStatus(HttpServletResponse.SC_OK);
     resp.sendRedirect("/users/view");

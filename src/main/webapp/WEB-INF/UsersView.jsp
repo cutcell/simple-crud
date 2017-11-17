@@ -42,6 +42,7 @@
 <table>
 
     <tr>
+        <th>ID</th>
         <th>Name</th>
         <th>Phone</th>
         <th>E-Mail</th>
@@ -49,10 +50,11 @@
     </tr>
     <c:forEach items="${userList}" var="u">
         <tr>
+            <td>${u.id}</td>
             <td>${u.name}</td>
             <td>${u.phone}</td>
             <td>${u.email}</td>
-            <td><a href="/users/view?edit">edit</a>&nbsp;&nbsp;<a href="/users/view?delete">delete</a></td>
+            <td><a href="/users/view?edit=${u.id}">edit</a>&nbsp;&nbsp;<a href="/users/view?delete=${u.id}">delete</a></td>
         </tr>
     </c:forEach>
 

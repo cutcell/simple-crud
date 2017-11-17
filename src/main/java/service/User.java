@@ -1,9 +1,11 @@
 package service;
 
+import db.UserDataSet;
 import java.io.Serializable;
 
 public class User implements Serializable {
 
+  private int id;
   private String name;
   private String phone;
   private String email;
@@ -18,6 +20,21 @@ public class User implements Serializable {
 
     this("", "", "");
 
+  }
+
+  public User(UserDataSet userDataSet) {
+    this.id = userDataSet.getId();
+    this.name = userDataSet.getName();
+    this.phone = userDataSet.getPhone();
+    this.email = userDataSet.getEmail();
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
   public String getName() {

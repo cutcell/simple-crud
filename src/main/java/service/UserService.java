@@ -26,7 +26,7 @@ public class UserService {
     UserDAO userDAO = new UserDAO(dbService.getConnection());
     List<UserDataSet> users = userDAO.getAllUsers();
     for (UserDataSet user : users) {
-      result.add(new User(user.getName(), user.getPhone(), user.getEmail()));
+      result.add(new User(user));
     }
     return result;
 
@@ -38,6 +38,38 @@ public class UserService {
 
     UserDAO userDAO = new UserDAO(dbService.getConnection());
     userDAO.insertUser(newUser);
+
+  }
+
+  public User getUserByName(String name) {
+
+    UserDAO userDAO = new UserDAO(dbService.getConnection());
+    UserDataSet user = userDAO.getUserByName(name);
+
+    return new User(user.getName(), user.getPhone(), user.getEmail());
+
+  }
+
+  public User getUserById(int id) {
+
+    UserDAO userDAO = new UserDAO(dbService.getConnection());
+    UserDataSet userDataSet = userDAO.getUserById(id);
+    return new User(userDataSet);
+
+  }
+
+  public void editUser(int id, User user) {
+
+    UserDAO userDAO = new UserDAO(dbService.getConnection());
+    UserDataSet userDataSet = new UserDataSet(user.getName(), user.getPhone(), user.getEmail());
+    userDAO.updateUser(id, userDataSet);
+
+  }
+
+  public void deleteUserById(int id) {
+
+    UserDAO userDAO = new UserDAO(dbService.getConnection());
+    userDAO.deleteUserById(id);
 
   }
 
