@@ -42,7 +42,7 @@
 
 </style>
 
-<form action="view" method="post">
+<form action="add" method="post">
     <label>Name:</label>
     <input type="text" name="name"><br>
     <label>Phone:</label>

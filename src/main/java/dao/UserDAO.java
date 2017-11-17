@@ -1,4 +1,4 @@
-package db;
+package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,8 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import model.User;
 
-public class UserDAO {
+public class UserDAO implements UsersDAO {
 
   private final Connection connection;
 
@@ -16,14 +17,14 @@ public class UserDAO {
     this.connection = connection;
   }
 
-  public List<UserDataSet> getAllUsers() {
+  public List<User> getAllUsers() {
 
-    List<UserDataSet> result = new ArrayList<>();
+    List<User> result = new ArrayList<>();
 
     try (Statement stmt = connection.createStatement()) {
       ResultSet resultSet = stmt.executeQuery("SELECT * FROM users");
       while (resultSet.next()) {
-        result.add(new UserDataSet(
+        result.add(new User(
             resultSet.getInt(1),
             resultSet.getString(2),
             resultSet.getString(3),
@@ -39,29 +40,7 @@ public class UserDAO {
 
   }
 
-  public UserDataSet getUserByName(String name) {
-
-    try (PreparedStatement stmt = connection
-        .prepareStatement("SELECT name. phone, email FROM users WHERE name LIKE ?")) {
-
-      stmt.setString(1, name);
-      ResultSet rs = stmt.executeQuery();
-
-      if (rs.next()) {
-        return new UserDataSet(rs.getString(1),
-            rs.getString(2), rs.getString(3));
-      }
-
-
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-
-    return new UserDataSet("", "", "");
-
-  }
-
-  public UserDataSet getUserById(int id) {
+  public User getUserById(int id) {
 
     try (PreparedStatement stmt = connection
         .prepareStatement("SELECT * FROM users WHERE id=?")) {
@@ -70,7 +49,7 @@ public class UserDAO {
       ResultSet rs = stmt.executeQuery();
 
       if (rs.next()) {
-        return new UserDataSet(
+        return new User(
             rs.getInt(1),
             rs.getString(2),
             rs.getString(3),
@@ -81,11 +60,11 @@ public class UserDAO {
       e.printStackTrace();
     }
 
-    return new UserDataSet("", "", "");
+    return new User("", "", "");
 
   }
 
-  public void insertUser(UserDataSet newUser) {
+  public void insertUser(User newUser) {
 
     try (PreparedStatement stmt = connection
         .prepareStatement("INSERT INTO users (name, phone, email) VALUES (?, ?, ?)")) {
@@ -102,7 +81,7 @@ public class UserDAO {
 
   }
 
-  public void updateUser(int id, UserDataSet newUser) {
+  public void updateUser(int id, User newUser) {
 
     try (PreparedStatement stmt = connection
         .prepareStatement("UPDATE users\n"

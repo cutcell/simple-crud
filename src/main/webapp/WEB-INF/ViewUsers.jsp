@@ -7,10 +7,11 @@
     <title>Users</title>
 </head>
 <body>
-<h1>Users</h1>
+<h2>Users</h2>
 
-<a href="/users/view?add">Add user</a>
-<br>
+<form action="add" method="get">
+    <input type="submit" value="New user">
+</form>
 <br>
 
 <style>
@@ -26,15 +27,21 @@
     th, td {
         border: 1px solid black;
         text-align: left;
-        padding: .5em;
+        padding: 10px;
     }
 
     th {
-        background-color: darkgray;
+        background-color: lightgray;
         color: black;
     }
 
-    tr:hover {background-color: #f5f5f5}
+    tr:hover {
+        background-color: #f5f5f5
+    }
+
+    input[type=submit] {
+        border-radius: 4px;
+    }
 
 </style>
 
@@ -54,14 +61,25 @@
             <td>${u.name}</td>
             <td>${u.phone}</td>
             <td>${u.email}</td>
-            <td><a href="/users/view?edit=${u.id}">edit</a>&nbsp;&nbsp;<a href="/users/view?delete=${u.id}">delete</a></td>
+            <td>
+                <form action="edit" method="get">
+                    <input type="hidden" name="userId" value="${u.id}">
+                    <input type="submit" value="Edit">
+                </form>
+                <form action="delete" method="post">
+                    <input type="hidden" name="userId" value="${u.id}">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
         </tr>
     </c:forEach>
 
 </table>
 
 <br>
-<a href="/users/view?add">Add user</a>
+<form action="add" method="get">
+    <input type="submit" value="New user">
+</form>
 
 </body>
 </html>

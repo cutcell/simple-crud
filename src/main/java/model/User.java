@@ -1,6 +1,5 @@
-package service;
+package model;
 
-import db.UserDataSet;
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -10,23 +9,23 @@ public class User implements Serializable {
   private String phone;
   private String email;
 
-  public User(String name, String phone, String email) {
-    this.name = name;
-    this.phone = phone;
-    this.email = email;
-  }
-
   public User() {
 
     this("", "", "");
 
   }
 
-  public User(UserDataSet userDataSet) {
-    this.id = userDataSet.getId();
-    this.name = userDataSet.getName();
-    this.phone = userDataSet.getPhone();
-    this.email = userDataSet.getEmail();
+  public User(String name, String phone, String email) {
+    this.name = name;
+    this.phone = phone;
+    this.email = email;
+  }
+
+  public User(int id, String name, String phone, String email) {
+    this.id = id;
+    this.name = name;
+    this.phone = phone;
+    this.email = email;
   }
 
   public int getId() {

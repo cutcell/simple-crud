@@ -42,7 +42,7 @@
 
 </style>
 
-<form action="view" method="post">
+<form action="edit" method="post">
     <label>ID</label>
     <input type="text" name="id" value="${editUser.id}" readonly><br>
     <label>Name:</label>
