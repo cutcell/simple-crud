@@ -1,4 +1,4 @@
-package dao;
+package com.javamentor.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,16 +7,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import model.User;
+import com.javamentor.model.User;
 
-public class UserDAO implements UsersDAO {
+public class UserDaoJdbc implements UserDao {
 
   private final Connection connection;
 
-  public UserDAO(Connection connection) {
+  public UserDaoJdbc(Connection connection) {
     this.connection = connection;
   }
 
+  @Override
   public List<User> getAllUsers() {
 
     List<User> result = new ArrayList<>();
@@ -40,6 +41,7 @@ public class UserDAO implements UsersDAO {
 
   }
 
+  @Override
   public User getUserById(int id) {
 
     try (PreparedStatement stmt = connection
@@ -64,6 +66,7 @@ public class UserDAO implements UsersDAO {
 
   }
 
+  @Override
   public void insertUser(User newUser) {
 
     try (PreparedStatement stmt = connection
@@ -81,6 +84,7 @@ public class UserDAO implements UsersDAO {
 
   }
 
+  @Override
   public void updateUser(int id, User newUser) {
 
     try (PreparedStatement stmt = connection
@@ -101,6 +105,7 @@ public class UserDAO implements UsersDAO {
 
   }
 
+  @Override
   public void deleteUserById(int id) {
 
     try (PreparedStatement stmt = connection

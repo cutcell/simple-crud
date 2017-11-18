@@ -1,4 +1,4 @@
-package controller;
+package com.javamentor.controller;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -6,7 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import service.UserService;
+import com.javamentor.service.UserService;
 
 @WebServlet("/add")
 public class AddUser extends HttpServlet {

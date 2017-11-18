@@ -1,9 +1,9 @@
-package dao;
+package com.javamentor.dao;
 
 import java.util.List;
-import model.User;
+import com.javamentor.model.User;
 
-public interface UsersDAO {
+public interface UserDao {
 
   List<User> getAllUsers();
 

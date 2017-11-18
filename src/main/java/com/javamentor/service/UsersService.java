@@ -1,7 +1,7 @@
-package service;
+package com.javamentor.service;
 
 import java.util.List;
-import model.User;
+import com.javamentor.model.User;
 
 public interface UsersService {
 
