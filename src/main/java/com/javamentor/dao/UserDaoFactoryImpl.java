@@ -1,11 +1,12 @@
 package com.javamentor.dao;
 
 import com.javamentor.util.DBHelper;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 public class UserDaoFactoryImpl implements UserDaoFactory {
+
+  private static final String PROPS_PATH = "/cfg/UserDaoFactory.properties";
 
   @Override
   public UserDao getUserDao() {
@@ -19,10 +20,13 @@ public class UserDaoFactoryImpl implements UserDaoFactory {
   private AccessType getAccessType() {
 
     Properties props = new Properties();
-    try (InputStream is = UserDaoFactory.class.getResourceAsStream("/UserDaoFactory.properties")) {
+
+    try (InputStreamReader is = new InputStreamReader(
+        UserDaoFactory.class.getResourceAsStream(PROPS_PATH))) {
       props.load(is);
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
+      return AccessType.HIBERNATE;
     }
 
     return AccessType.valueOf(props.getProperty("accessType", "HIBERNATE"));
