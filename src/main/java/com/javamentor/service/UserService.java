@@ -1,18 +1,14 @@
 package com.javamentor.service;
 
 import com.javamentor.dao.UserDao;
-import com.javamentor.dao.UserDaoHibernate;
-import java.util.List;
+import com.javamentor.dao.UserDaoFactoryImpl;
 import com.javamentor.model.User;
 import com.javamentor.util.DBHelper;
+import java.util.List;
 
 public class UserService implements UsersService {
 
-  private UserDao usersDao = new UserDaoHibernate();
-
-  public static void createUsersTable() {
-    DBHelper.createUsersTable();
-  }
+  private UserDao usersDao = new UserDaoFactoryImpl().getUserDao();
 
   public List<User> getAllUsers() {
 
@@ -45,7 +41,7 @@ public class UserService implements UsersService {
   }
 
   public static void close() {
-    DBHelper.shutdown();
+    DBHelper.getInstance().shutdown();
   }
 
 }

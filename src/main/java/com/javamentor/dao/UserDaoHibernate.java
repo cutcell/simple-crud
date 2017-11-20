@@ -1,34 +1,42 @@
 package com.javamentor.dao;
 
-import java.util.List;
 import com.javamentor.model.User;
+import java.util.List;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import com.javamentor.util.HibernateHelper;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 public class UserDaoHibernate implements UserDao {
 
+  private Configuration cfg;
+  private SessionFactory sessionFactory;
+
   public UserDaoHibernate() {
+  }
+
+  public UserDaoHibernate(Configuration cfg) {
+    this.cfg = cfg;
+    this.sessionFactory = getSessionFactory();
   }
 
   @Override
   public List<User> getAllUsers() {
 
-    Session session = HibernateHelper.getSessison();
-    Query<User> query = session.createQuery("from User u");
-    List<User> list = query.list();
-
+    Session session = sessionFactory.openSession();
+    List<User> list = session.createQuery("from User").list();
+    session.close();
     return list;
+
   }
 
   @Override
   public User getUserById(int id) {
 
-    Session session = HibernateHelper.getSessison();
-    Query<User> query = session.createQuery("from User u where u.id=:id");
-    query.setParameter("id", id);
-    User findUser = query.uniqueResult();
+    Session session = sessionFactory.openSession();
+    User findUser = session.find(User.class, id);
     session.close();
     return findUser;
 
@@ -37,7 +45,7 @@ public class UserDaoHibernate implements UserDao {
   @Override
   public void insertUser(User newUser) {
 
-    Session session = HibernateHelper.getSessison();
+    Session session = sessionFactory.openSession();
     Transaction tx = session.beginTransaction();
 
     session.save(newUser);
@@ -50,15 +58,15 @@ public class UserDaoHibernate implements UserDao {
   @Override
   public void updateUser(int id, User newUser) {
 
-    User updatedUser = getUserById(id);
+    User foundUser = getUserById(id);
 
-    updatedUser.setName(newUser.getName());
-    updatedUser.setPhone(newUser.getPhone());
-    updatedUser.setEmail(newUser.getEmail());
+    foundUser.setName(newUser.getName());
+    foundUser.setPhone(newUser.getPhone());
+    foundUser.setEmail(newUser.getEmail());
 
-    Session session = HibernateHelper.getSessison();
+    Session session = sessionFactory.openSession();
     Transaction tx = session.beginTransaction();
-    session.update(updatedUser);
+    session.update(foundUser);
     tx.commit();
     session.close();
 
@@ -69,11 +77,25 @@ public class UserDaoHibernate implements UserDao {
 
     User deleteUser = getUserById(id);
 
-    Session session = HibernateHelper.getSessison();
+    Session session = sessionFactory.openSession();
     Transaction tx = session.beginTransaction();
     session.delete(deleteUser);
     tx.commit();
     session.close();
+
+  }
+
+  public void setCfg(Configuration cfg) {
+    this.cfg = cfg;
+  }
+
+  private SessionFactory getSessionFactory() {
+
+    StandardServiceRegistryBuilder srBuilder = new StandardServiceRegistryBuilder();
+    srBuilder.applySettings(cfg.getProperties());
+    ServiceRegistry sr = srBuilder.build();
+
+    return cfg.buildSessionFactory(sr);
 
   }
 

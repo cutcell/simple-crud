@@ -1,75 +1,78 @@
 package com.javamentor.util;
 
+import com.javamentor.model.User;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import org.hibernate.cfg.Configuration;
 
 public class DBHelper {
 
-  private static Connection CONNECTION = getH2Connection();
+  private static DBHelper instance;
 
-  public static Connection getConnection() {
+  private final Connection connection;
+  private final Configuration configuration;
 
-    if (CONNECTION == null) {
-      CONNECTION = getH2Connection();
+  private DBHelper() {
+    connection = getH2Connection();
+    configuration = getHibernateConfiguration();
+  }
+
+  public static DBHelper getInstance() {
+
+    if (instance == null) {
+      instance = new DBHelper();
     }
 
-    return CONNECTION;
+    return instance;
 
   }
 
-  public static void createUsersTable() {
-
-    if (usersTableExists()) {
-      return;
-    }
-
-    try (Statement stmt = CONNECTION.createStatement()) {
-      stmt.executeUpdate("CREATE TABLE users (\n"
-          + "  id INT IDENTITY(1,1) PRIMARY KEY,\n"
-          + "  name VARCHAR(255),\n"
-          + "  phone VARCHAR(25),\n"
-          + "  email VARCHAR(255)\n"
-          + ")");
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-
+  public Configuration getConfiguration() {
+    return configuration;
   }
 
-  private static boolean usersTableExists() {
+  public Connection getConnection() {
+    return connection;
+  }
+
+
+  public void shutdown() {
+
     try {
-      DatabaseMetaData dbMetadata = CONNECTION.getMetaData();
-      ResultSet tables = dbMetadata.getTables(null, null, "USERS", new String[] {"TABLE"});
-      return tables.next();
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return false;
-    }
-  }
-
-  public static void shutdown() {
-    try {
-      CONNECTION.close();
+      connection.close();
     } catch (SQLException e) {
       e.printStackTrace();
     }
+
   }
 
-  private static Connection getH2Connection() {
+  private Connection getH2Connection() {
 
     Connection connection = null;
     try {
       Class.forName("org.h2.Driver");
-      connection = DriverManager.getConnection("jdbc:h2:./h2", "sa", "");
+      connection = DriverManager.getConnection("jdbc:h2:~/h2", "sa", "");
     } catch (SQLException | ClassNotFoundException e) {
       e.printStackTrace();
     }
 
     return connection;
+
+  }
+
+  private Configuration getHibernateConfiguration() {
+
+    Configuration cfg = new Configuration();
+    cfg.addAnnotatedClass(User.class);
+    cfg.setProperty("hibernate.connection.url", "jdbc:h2:~/h2");
+    cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
+    cfg.setProperty("hibernate.connection.username", "sa");
+    cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+    cfg.setProperty("hibernate.show_sql", "true");
+    cfg.setProperty("hibernate.format_sql", "true");
+
+    return cfg;
 
   }
 }
