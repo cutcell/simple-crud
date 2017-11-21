@@ -61,6 +61,7 @@
         <directory>${basedir}/src/main/resources</directory>
         <includes>
           <include>UserDaoFactory.properties</include>
+          <include>db.properties</include>
         </includes>
       </resource>
     </resources>

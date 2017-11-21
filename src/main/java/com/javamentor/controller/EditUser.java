@@ -1,5 +1,6 @@
 package com.javamentor.controller;
 
+import com.javamentor.service.UsersService;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,12 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.javamentor.model.User;
-import com.javamentor.service.UserService;
+import com.javamentor.service.UserServiceImpl;
 
 @WebServlet("/edit")
 public class EditUser extends HttpServlet {
 
-  private UserService userService = new UserService();
+  private UsersService userService = UserServiceImpl.getInstance();
 
   @Override
 

@@ -4,24 +4,32 @@ import com.javamentor.model.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import org.hibernate.cfg.Configuration;
 
-public class DBHelper {
+public class DbHelper {
 
-  private static DBHelper instance;
+  private static final String PROPS_PATH = "/cfg/db.properties";
+  private static DbHelper instance;
 
+  private Properties dbProps;
   private final Connection connection;
   private final Configuration configuration;
 
-  private DBHelper() {
+  private DbHelper() {
+    dbProps = PropHelper.getDbProperties(DbHelper.class, PROPS_PATH);
     connection = getH2Connection();
     configuration = getHibernateConfiguration();
   }
 
-  public static DBHelper getInstance() {
+  public static DbHelper getInstance() {
 
     if (instance == null) {
-      instance = new DBHelper();
+      synchronized (DbHelper.class) {
+        if (instance == null) {
+          instance = new DbHelper();
+        }
+      }
     }
 
     return instance;
@@ -35,7 +43,6 @@ public class DBHelper {
   public Connection getConnection() {
     return connection;
   }
-
 
   public void shutdown() {
 
@@ -51,8 +58,11 @@ public class DBHelper {
 
     Connection connection = null;
     try {
-      Class.forName("org.h2.Driver");
-      connection = DriverManager.getConnection("jdbc:h2:~/h2", "sa", "");
+      String driverClass = dbProps.getProperty("jdbc.driverClass");
+      String dbURL = dbProps.getProperty("jdbc.url");
+      String user = dbProps.getProperty("jdbc.username");
+      Class.forName(driverClass);
+      connection = DriverManager.getConnection(dbURL, user, "");
     } catch (SQLException | ClassNotFoundException e) {
       e.printStackTrace();
     }
@@ -65,12 +75,7 @@ public class DBHelper {
 
     Configuration cfg = new Configuration();
     cfg.addAnnotatedClass(User.class);
-    cfg.setProperty("hibernate.connection.url", "jdbc:h2:~/h2");
-    cfg.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
-    cfg.setProperty("hibernate.connection.username", "sa");
-    cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-    cfg.setProperty("hibernate.show_sql", "true");
-    cfg.setProperty("hibernate.format_sql", "true");
+    cfg.setProperties(dbProps);
 
     return cfg;
 

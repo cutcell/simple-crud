@@ -1,6 +1,6 @@
 package com.javamentor.dao;
 
-import com.javamentor.util.DBHelper;
+import com.javamentor.util.DbHelper;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
@@ -11,9 +11,16 @@ public class UserDaoFactoryImpl implements UserDaoFactory {
   @Override
   public UserDao getUserDao() {
 
-    return getAccessType() == AccessType.JDBC
-        ? new UserDaoJdbc(DBHelper.getInstance().getConnection())
-        : new UserDaoHibernate(DBHelper.getInstance().getConfiguration());
+    AccessType accessType = getAccessType();
+
+    switch (accessType) {
+      case HIBERNATE:
+        return new UserDaoHibernate(DbHelper.getInstance().getConfiguration());
+      case JDBC:
+        return new UserDaoJdbc(DbHelper.getInstance().getConnection());
+      default:
+        return new UserDaoHibernate(DbHelper.getInstance().getConfiguration());
+    }
 
   }
 
