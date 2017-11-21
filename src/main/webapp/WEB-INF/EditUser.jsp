@@ -2,57 +2,77 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>New user</title>
+    <title>Edit user</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+          crossorigin="anonymous">
 </head>
 <body>
 
-<style>
+<div class="container-fluid">
 
-    input[type=text] {
-        width: 20%;
-        padding: 12px 20px;
-        margin: 12px;
-        box-sizing: border-box;
-        border: 1px solid black;
-        outline: none;
-    }
+    <br>
+    <h3>Edit user</h3>
+    <br>
 
-    input[type=tel] {
-        width: 20%;
-        padding: 12px 20px;
-        margin: 12px;
-        box-sizing: border-box;
-        border: 1px solid black;
-        outline: none;
-    }
+    <form action="edit" method="post">
 
-    input[type=email] {
-        width: 20%;
-        padding: 12px 20px;
-        margin: 12px;
-        box-sizing: border-box;
-        border: 1px solid black;
-        outline: none;
-    }
+        <div class="form-group row">
+            <label for="idFormInput" class="col-sm-2 col-form-label">ID</label>
+            <div class="col-sm-8">
+                <input type="text" readonly class="form-control-plaintext" id="idFormInput"
+                       value="${editUser.id}" name="id">
+            </div>
+        </div>
 
-    input[type=submit] {
-        border-radius: 4px;
+        <div class="form-group row">
+            <label for="nameFormInput" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="nameFormInput"
+                       value="${editUser.name}" name="name" placeholder="User name">
+            </div>
+        </div>
 
-    }
+        <div class="form-group row">
+            <label for="phoneFormInput" class="col-sm-2 col-form-label">Telephone</label>
+            <div class="col-sm-8">
+                <input type="tel" class="form-control" id="phoneFormInput"
+                       value="${editUser.phone}" name="phone" placeholder="Telephone">
+            </div>
+        </div>
 
-</style>
+        <div class="form-group row">
+            <label for="emailFormInput" class="col-sm-2 col-form-label">E-Mail</label>
+            <div class="col-sm-8">
+                <input type="email" class="form-control" id="emailFormInput"
+                       value="${editUser.email}" name="email" placeholder="E-Mail">
+            </div>
+        </div>
 
-<form action="edit" method="post">
-    <label>ID</label>
-    <input type="text" name="id" value="${editUser.id}" readonly><br>
-    <label>Name:</label>
-    <input type="text" name="name" value="${editUser.name}"><br>
-    <label>Phone:</label>
-    <input type="tel" name="phone" value="${editUser.phone}"><br>
-    <label>Email</label>
-    <input type="email" name="email" value="${editUser.email}"><br>
-    <input type="submit" value="Save">
-</form>
+        <div class="form-group row">
+            <div class="col-sm-8">
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
 
+    </form>
+
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
 </body>
 </html>
