@@ -1,5 +1,7 @@
 package com.javamentor.controller;
 
+import com.javamentor.service.UsersService;
+import com.javamentor.util.DbHelper;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -8,12 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.javamentor.model.User;
-import com.javamentor.service.UserService;
+import com.javamentor.service.UserServiceImpl;
 
 @WebServlet("/view")
 public class ViewUsers extends HttpServlet {
 
-  private UserService userService = new UserService();
+  private UsersService userService = UserServiceImpl.getInstance();
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -31,7 +33,7 @@ public class ViewUsers extends HttpServlet {
   @Override
   public void destroy() {
 
-    UserService.close();
+    DbHelper.getInstance().shutdown();
     super.destroy();
 
   }

@@ -11,10 +11,13 @@ import com.javamentor.model.User;
 
 public class UserDaoJdbc implements UserDao {
 
-  private final Connection connection;
+  private Connection connection;
 
   public UserDaoJdbc(Connection connection) {
     this.connection = connection;
+  }
+
+  public UserDaoJdbc() {
   }
 
   @Override
@@ -22,8 +25,10 @@ public class UserDaoJdbc implements UserDao {
 
     List<User> result = new ArrayList<>();
 
-    try (Statement stmt = connection.createStatement()) {
-      ResultSet resultSet = stmt.executeQuery("SELECT * FROM users");
+    try (PreparedStatement stmt = connection
+        .prepareStatement("SELECT * FROM USERS")) {
+
+      ResultSet resultSet = stmt.executeQuery();
       while (resultSet.next()) {
         result.add(new User(
             resultSet.getInt(1),
@@ -32,7 +37,7 @@ public class UserDaoJdbc implements UserDao {
             resultSet.getString(4)
         ));
       }
-      resultSet.close();
+
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -45,7 +50,7 @@ public class UserDaoJdbc implements UserDao {
   public User getUserById(int id) {
 
     try (PreparedStatement stmt = connection
-        .prepareStatement("SELECT * FROM users WHERE id=?")) {
+        .prepareStatement("SELECT * FROM USERS WHERE id=?")) {
 
       stmt.setInt(1, id);
       ResultSet rs = stmt.executeQuery();
@@ -70,7 +75,7 @@ public class UserDaoJdbc implements UserDao {
   public void insertUser(User newUser) {
 
     try (PreparedStatement stmt = connection
-        .prepareStatement("INSERT INTO users (name, phone, email) VALUES (?, ?, ?)")) {
+        .prepareStatement("INSERT INTO USERS (name, phone, email) VALUES (?, ?, ?)")) {
 
       stmt.setString(1, newUser.getName());
       stmt.setString(2, newUser.getPhone());
@@ -88,7 +93,7 @@ public class UserDaoJdbc implements UserDao {
   public void updateUser(int id, User newUser) {
 
     try (PreparedStatement stmt = connection
-        .prepareStatement("UPDATE users\n"
+        .prepareStatement("UPDATE USERS\n"
             + "SET name=?, phone=?, email=?\n"
             + "WHERE id=?")) {
 
@@ -109,7 +114,7 @@ public class UserDaoJdbc implements UserDao {
   public void deleteUserById(int id) {
 
     try (PreparedStatement stmt = connection
-        .prepareStatement("DELETE FROM users WHERE id=?")) {
+        .prepareStatement("DELETE FROM USERS WHERE id=?")) {
 
       stmt.setInt(1, id);
 
@@ -122,5 +127,7 @@ public class UserDaoJdbc implements UserDao {
 
   }
 
-
+  public void setConnection(Connection connection) {
+    this.connection = connection;
+  }
 }
