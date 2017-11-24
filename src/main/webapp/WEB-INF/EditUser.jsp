@@ -23,39 +23,69 @@
     <form action="edit" method="post">
 
         <div class="form-group row">
-            <label for="idFormInput" class="col-sm-2 col-form-label">ID</label>
-            <div class="col-sm-8">
+            <label for="idFormInput" class="col-1 col-form-label">ID</label>
+            <div class="col-4">
                 <input type="text" readonly class="form-control-plaintext" id="idFormInput"
                        value="${editUser.id}" name="id">
             </div>
         </div>
 
+        <%--login--%>
         <div class="form-group row">
-            <label for="nameFormInput" class="col-sm-2 col-form-label">Name</label>
-            <div class="col-sm-8">
+            <label for="loginFormInput" class="col-1 col-form-label">Login</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="loginFormInput"
+                       value="${editUser.login}" name="login">
+            </div>
+        </div>
+
+        <%--password--%>
+        <div class="form-group row">
+            <label for="passwordFormInput" class="col-1 col-form-label">Password</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="passwordFormInput"
+                       value="${editUser.password}" name="password">
+            </div>
+        </div>
+
+        <%--role--%>
+        <div class="form-group row">
+            <label for="roleFormInput" class="col-1 col-form-label">Role</label>
+            <div class="col-4">
+                <input type="text" class="form-control" id="roleFormInput"
+                       value="${editUser.role}" name="role">
+            </div>
+        </div>
+
+        <%--name--%>
+        <div class="form-group row">
+            <label for="nameFormInput" class="col-1 col-form-label">Name</label>
+            <div class="col-4">
                 <input type="text" class="form-control" id="nameFormInput"
-                       value="${editUser.name}" name="name" placeholder="User name">
+                       value="${editUser.name}" name="name">
             </div>
         </div>
 
+        <%--phone--%>
         <div class="form-group row">
-            <label for="phoneFormInput" class="col-sm-2 col-form-label">Telephone</label>
-            <div class="col-sm-8">
+            <label for="phoneFormInput" class="col-1 col-form-label">Telephone</label>
+            <div class="col-4">
                 <input type="tel" class="form-control" id="phoneFormInput"
-                       value="${editUser.phone}" name="phone" placeholder="Telephone">
+                       value="${editUser.phone}" name="phone">
             </div>
         </div>
 
+        <%--email--%>
         <div class="form-group row">
-            <label for="emailFormInput" class="col-sm-2 col-form-label">E-Mail</label>
-            <div class="col-sm-8">
+            <label for="emailFormInput" class="col-1 col-form-label">E-Mail</label>
+            <div class="col-4">
                 <input type="email" class="form-control" id="emailFormInput"
-                       value="${editUser.email}" name="email" placeholder="E-Mail">
+                       value="${editUser.email}" name="email">
             </div>
         </div>
 
         <div class="form-group row">
-            <div class="col-sm-8">
+            <div class="col-4">
                 <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
         </div>

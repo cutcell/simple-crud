@@ -22,16 +22,11 @@
     <h3>Users</h3>
     <br>
 
-    <form action="add" method="get">
-        <button type="submit" class="btn btn-primary">New user</button>
-    </form>
-    <br>
-
-
     <table class="table table-sm">
         <thead class="thead-light">
         <tr>
             <th scope="col">ID</th>
+            <th scope="col">Login</th>
             <th scope="col">Name</th>
             <th scope="col">Phone</th>
             <th scope="col">E-Mail</th>
@@ -42,6 +37,7 @@
         <c:forEach items="${userList}" var="u">
             <tr>
                 <td>${u.id}</td>
+                <td>${u.login}</td>
                 <td>${u.name}</td>
                 <td>${u.phone}</td>
                 <td>${u.email}</td>
@@ -67,9 +63,19 @@
     </table>
 
     <br>
-    <form action="add" method="get">
-        <button type="submit" class="btn btn-primary">New user</button>
-    </form>
+
+    <div class="btn-toolbar" role="toolbar" aria-label="adminActionsToolbar">
+        <div class="btn-group mr-2" role="group" aria-label="adminAddUserGroup">.
+            <form action="add" method="get">
+                <button type="submit" class="btn btn-primary">New user</button>
+            </form>
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="adminLogoutGroup">
+            <form action="logout" method="post">
+                <button class="btn btn-success" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
 
 </div>
 
