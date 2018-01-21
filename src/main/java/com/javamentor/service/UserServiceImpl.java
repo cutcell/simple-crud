@@ -3,60 +3,71 @@ package com.javamentor.service;
 import com.javamentor.dao.UserDao;
 import com.javamentor.dao.UserDaoFactoryImpl;
 import com.javamentor.model.User;
+
 import java.util.List;
 
 public class UserServiceImpl implements UsersService {
 
-  private static UsersService instance;
+    private static UsersService instance;
 
-  private UserDao usersDao;
+    private UserDao usersDao;
 
-  private UserServiceImpl() {
-    usersDao = new UserDaoFactoryImpl().getUserDao();
-  }
-
-  public static UsersService getInstance() {
-
-    if (instance == null) {
-      synchronized (UserServiceImpl.class) {
-        if (instance == null) {
-          instance = new UserServiceImpl();
-        }
-      }
+    private UserServiceImpl() {
+        usersDao = new UserDaoFactoryImpl().getUserDao();
     }
 
-    return instance;
+    public static UsersService getInstance() {
 
-  }
+        if (instance == null) {
+            synchronized (UserServiceImpl.class) {
+                if (instance == null) {
+                    instance = new UserServiceImpl();
+                }
+            }
+        }
 
-  public List<User> getAllUsers() {
+        return instance;
 
-    return usersDao.getAllUsers();
+    }
 
-  }
+    @Override
+    public List<User> getAllUsers() {
 
-  public void addNewUser(String name, String phone, String email) {
+        return usersDao.getAllUsers();
 
-    usersDao.insertUser(new User(name, phone, email));
+    }
 
-  }
+    @Override
+    public void addNewUser(User newUser) {
 
-  public User getUserById(int id) {
+        usersDao.insertUser(newUser);
 
-    return usersDao.getUserById(id);
+    }
 
-  }
+    @Override
+    public User getUserById(int id) {
 
-  public void editUser(int id, User user) {
+        return usersDao.getUserById(id);
 
-    usersDao.updateUser(id, user);
+    }
 
-  }
+    @Override
+    public void editUser(int id, User user) {
 
-  public void deleteUserById(int id) {
+        usersDao.updateUser(id, user);
 
-    usersDao.deleteUserById(id);
+    }
 
-  }
+    @Override
+    public void deleteUserById(int id) {
+
+        usersDao.deleteUserById(id);
+
+    }
+
+    @Override
+    public User getUserByLogin(String login) {
+        return usersDao.getUserByLogin(login);
+    }
 
 }

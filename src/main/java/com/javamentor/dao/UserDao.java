@@ -1,18 +1,21 @@
 package com.javamentor.dao;
 
 import java.util.List;
+
 import com.javamentor.model.User;
 
 public interface UserDao {
 
-  List<User> getAllUsers();
+    List<User> getAllUsers();
 
-  User getUserById(int id);
+    User getUserById(int id);
 
-  void insertUser(User newUser);
+    void insertUser(User newUser);
 
-  void updateUser(int id, User newUser);
+    void updateUser(int id, User newUser);
 
-  void deleteUserById(int id);
+    void deleteUserById(int id);
+
+    User getUserByLogin(String login);
 
 }

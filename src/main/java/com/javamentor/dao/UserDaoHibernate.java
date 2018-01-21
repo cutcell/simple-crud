@@ -1,102 +1,129 @@
 package com.javamentor.dao;
 
 import com.javamentor.model.User;
+
 import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
 
 public class UserDaoHibernate implements UserDao {
 
-  private Configuration cfg;
-  private SessionFactory sessionFactory;
+    private Configuration cfg;
+    private SessionFactory sessionFactory;
 
-  public UserDaoHibernate() {
-  }
+    public UserDaoHibernate() {
+    }
 
-  public UserDaoHibernate(Configuration cfg) {
-    this.cfg = cfg;
-    this.sessionFactory = getSessionFactory();
-  }
+    public UserDaoHibernate(Configuration cfg) {
+        this.cfg = cfg;
+        this.sessionFactory = getSessionFactory();
+    }
 
-  @Override
-  public List<User> getAllUsers() {
+    @Override
+    public List<User> getAllUsers() {
 
-    Session session = sessionFactory.openSession();
-    List<User> list = session.createQuery("from User").list();
-    session.close();
-    return list;
+        Session session = sessionFactory.openSession();
+        List<User> list = session.createQuery("from Users u").list();
+        session.close();
+        return list;
 
-  }
+    }
 
-  @Override
-  public User getUserById(int id) {
+    @Override
+    public User getUserById(int id) {
 
-    Session session = sessionFactory.openSession();
-    User findUser = session.find(User.class, id);
-    session.close();
-    return findUser;
+        Session session = sessionFactory.openSession();
+        User findUser = session.find(User.class, id);
+        session.close();
+        return findUser;
 
-  }
+    }
 
-  @Override
-  public void insertUser(User newUser) {
+    @Override
+    public void insertUser(User newUser) {
 
-    Session session = sessionFactory.openSession();
-    Transaction tx = session.beginTransaction();
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
 
-    session.save(newUser);
+        session.save(newUser);
 
-    tx.commit();
-    session.close();
+        tx.commit();
+        session.close();
 
-  }
+    }
 
-  @Override
-  public void updateUser(int id, User newUser) {
+    @Override
+    public void updateUser(int id, User newUser) {
 
-    User foundUser = getUserById(id);
+        User foundUser = getUserById(id);
 
-    foundUser.setName(newUser.getName());
-    foundUser.setPhone(newUser.getPhone());
-    foundUser.setEmail(newUser.getEmail());
+        foundUser.setLogin(newUser.getLogin());
+        foundUser.setPassword(newUser.getPassword());
+        foundUser.setRole(newUser.getRole());
+        foundUser.setName(newUser.getName());
+        foundUser.setPhone(newUser.getPhone());
+        foundUser.setEmail(newUser.getEmail());
 
-    Session session = sessionFactory.openSession();
-    Transaction tx = session.beginTransaction();
-    session.update(foundUser);
-    tx.commit();
-    session.close();
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        session.update(foundUser);
+        tx.commit();
+        session.close();
 
-  }
+    }
 
-  @Override
-  public void deleteUserById(int id) {
+    @Override
+    public void deleteUserById(int id) {
 
-    User deleteUser = getUserById(id);
+        User deleteUser = getUserById(id);
 
-    Session session = sessionFactory.openSession();
-    Transaction tx = session.beginTransaction();
-    session.delete(deleteUser);
-    tx.commit();
-    session.close();
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        session.delete(deleteUser);
+        tx.commit();
+        session.close();
 
-  }
+    }
 
-  public void setCfg(Configuration cfg) {
-    this.cfg = cfg;
-  }
+    public void setCfg(Configuration cfg) {
+        this.cfg = cfg;
+    }
 
-  private SessionFactory getSessionFactory() {
+    @Override
+    public User getUserByLogin(String login) {
 
-    StandardServiceRegistryBuilder srBuilder = new StandardServiceRegistryBuilder();
-    srBuilder.applySettings(cfg.getProperties());
-    ServiceRegistry sr = srBuilder.build();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("from Users u where u.login=:login");
+        query.setParameter("login", login);
 
-    return cfg.buildSessionFactory(sr);
+        List resultList = query.getResultList();
 
-  }
+        session.close();
+
+        if (resultList.isEmpty()) {
+            return null;
+        }
+
+        User foundUser = (User) resultList.get(0);
+
+        return foundUser;
+
+    }
+
+    private SessionFactory getSessionFactory() {
+
+        StandardServiceRegistryBuilder srBuilder = new StandardServiceRegistryBuilder();
+        srBuilder.applySettings(cfg.getProperties());
+        ServiceRegistry sr = srBuilder.build();
+
+        return cfg.buildSessionFactory(sr);
+
+    }
 
 }
